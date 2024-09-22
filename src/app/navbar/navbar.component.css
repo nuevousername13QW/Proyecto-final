@@ -1,0 +1,41 @@
+.navbar {
+    background-color: #000000;
+    color: white;
+  }
+  
+  .navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .navbar-links {
+    list-style: none;
+    display: flex;
+    gap: 60px;
+    
+  }
+
+  .boton-navbar{
+    background: #39A900;
+    border-radius: 10px;
+    border-color: #F6F6F6;
+    border-width: 3px;
+    padding: 10px 15px; /* Aumenta el espacio interno del botón */
+    font-size: 16px;    /* Aumenta el tamaño del texto */
+    width: auto;        /* Ajusta el ancho automáticamente */
+    height: auto;       /* Ajusta la altura automáticamente */
+  }
+  
+  .navbar-links a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px; 
+  }
+
+.navbar-logo{
+    width: 95px;
+    height: 83.13px;
+    margin-right: 20px;
+}
+  
