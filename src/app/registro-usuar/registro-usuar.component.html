@@ -1,1 +1,53 @@
-<p>registro-usuar works!</p>
+<!-- Único formulario que abarca todos los campos -->
+<form class="cen-form" [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+
+  <!-- Primera columna -->
+  <div class="caja1">
+    <div class="xd">
+      <label>Número de Identificación</label>
+      <input formControlName="numeroIdentificacion" type="text">
+    </div>
+    <div class="xd">
+      <label>Nombre Completo</label>
+      <input formControlName="nombreCompleto" type="text">
+    </div>
+    <div class="xd">
+      <label>Tipo de Usuarios</label>
+      <input formControlName="tipoUsuarios" type="text">
+    </div>
+    <div class="xd">
+      <label>Marca</label>
+      <input formControlName="marca" type="text">
+    </div>
+  </div>
+
+  <div class="caja2">
+    <strong>
+      <h2>Registro de Usuarios y Computadores</h2>
+    </strong>
+  </div>
+  <!-- Botón de envío -->
+  <div class="caja4">
+    <button type="submit">Guardar</button>
+  </div>
+  <!-- Segunda columna -->
+  <div class="caja3">
+    <div class="xd">
+      <label>Serial</label>
+      <input formControlName="serial" type="text">
+    </div>
+    <div class="xd">
+      <label>Color</label>
+      <input formControlName="color" type="text">
+    </div>
+    <div class="xd">
+      <label>Cargador</label>
+      <input formControlName="cargador" type="text">
+    </div>
+    <div class="xd">
+      <label>Mouse</label>
+      <input formControlName="mouse" type="text">
+    </div>
+  </div>
+
+</form>

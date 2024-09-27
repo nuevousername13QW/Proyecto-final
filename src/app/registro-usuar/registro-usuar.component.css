@@ -1,0 +1,123 @@
+/* Estilos generales para el contenedor del formulario */
+.form-container {
+  padding: 5vh;
+  width: 90%; /* Se adapta al 90% del ancho de la pantalla */
+  margin: auto;
+}
+
+input[type="text"] {
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%; /* Input ocupará todo el ancho del contenedor */
+  background-color: black;
+  color: white;
+  border: 1px solid #FFFFFF;
+}
+
+.xd {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+label {
+  background-color: black;
+  border-radius: 20px;
+  flex: 0 0 30%; /* Las etiquetas ocupan el 30% del espacio disponible */
+  color: #FFFFFF;
+  font-size: 1.2rem; /* Tamaño de fuente ajustado para mayor legibilidad */
+  text-align: center;
+}
+
+input {
+  flex: 1;
+  margin-left: 10px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 20px;
+  border-color: #FFFFFF;
+  background-color: black;
+  color: #FFFFFF;
+}
+
+/* Contenedor central del formulario */
+.cen-form {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 5%;
+  margin: 7%;
+}
+
+h2 {
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.caja1, .caja2, .caja3, .caja4 {
+  width: 48%; /* Aproximadamente la mitad del contenedor */
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.caja2, .caja4 {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* Diseño responsive para pantallas pequeñas */
+@media (max-width: 768px) {
+  .cen-form {
+    width: 90%; /* En pantallas pequeñas, ocupa casi todo el ancho */
+  }
+
+  label {
+    flex: 0 0 40%; /* Las etiquetas ocuparán más espacio */
+    font-size: 1rem; /* Ajusta el tamaño de fuente */
+  }
+
+  input {
+    flex: 1;
+    font-size: 0.9rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 8px 15px;
+  }
+}
+
+/* Ajustes adicionales para pantallas aún más pequeñas (móviles) */
+@media (max-width: 480px) {
+  .cen-form {
+    width: 100%;
+  }
+
+  label {
+    flex: 0 0 100%; /* Las etiquetas ocuparán el 100% del ancho */
+    margin-bottom: 5px;
+    text-align: left; /* Etiquetas alineadas a la izquierda */
+  }
+
+  input {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .xd {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+  }
+}
