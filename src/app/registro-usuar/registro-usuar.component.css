@@ -20,7 +20,21 @@ input[type="text"] {
   margin-bottom: 15px;
 }
 
+select{
+  border: 1px solid #FFFFFF;
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  width: 30vh;
+  border-radius: 10px;
+  border-color: #FFFFFF;
+  background-color: black;
+  color: #FFFFFF;
+  margin-left: 60px;
+}
+
 label {
+  
   background-color: black;
   border-radius: 20px;
   flex: 0 0 30%; /* Las etiquetas ocupan el 30% del espacio disponible */

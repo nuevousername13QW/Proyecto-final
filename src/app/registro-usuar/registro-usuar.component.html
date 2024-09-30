@@ -5,16 +5,21 @@
   <div class="caja1">
     <div class="xd">
       <label>Número de Identificación</label>
-      <input formControlName="numeroIdentificacion" type="text">
+      <input formControlName="numeroIdentificacion" required pattern="^[0-9]+$" title="Solo números permitidos" type="text">
     </div>
     <div class="xd">
       <label>Nombre Completo</label>
       <input formControlName="nombreCompleto" type="text">
     </div>
     <div class="xd">
-      <label>Tipo de Usuarios</label>
-      <input formControlName="tipoUsuarios" type="text">
+      <label for="tipoUsuarios">Tipo de Usuario</label>
+      <select formControlName="tipoUsuarios" id="tipoUsuarios">
+        <option value="aprendiz">Aprendiz</option>
+        <option value="instructor">Instructor</option>
+        <option value="visitante">Visitante</option>
+      </select>
     </div>
+    
     <div class="xd">
       <label>Marca</label>
       <input formControlName="marca" type="text">
@@ -28,7 +33,7 @@
   </div>
   <!-- Botón de envío -->
   <div class="caja4">
-    <button type="submit">Guardar</button>
+    <button type="submit" >Guardar</button>
   </div>
   <!-- Segunda columna -->
   <div class="caja3">
@@ -42,11 +47,17 @@
     </div>
     <div class="xd">
       <label>Cargador</label>
-      <input formControlName="cargador" type="text">
+      <select formControlName="cargador" id="cargador">
+        <option value="1">Sí</option>
+        <option value="0">No</option>
+      </select>
     </div>
     <div class="xd">
       <label>Mouse</label>
-      <input formControlName="mouse" type="text">
+      <select formControlName="mouse" id="mouse">
+        <option value="1">Sí</option>
+        <option value="0">No</option>
+      </select>
     </div>
   </div>
 

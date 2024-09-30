@@ -6,8 +6,9 @@
     <title></title>
 </head>
 <body>
-    <app-navbar/>
-   <app-registro-usuar></app-registro-usuar>
+    
+    <app-navbar (onViewChange)="setView($event)"></app-navbar>
+    <app-registro-usuar *ngIf="currentView === 'registro-usuar'"></app-registro-usuar>
 </body>
 </html>
 
