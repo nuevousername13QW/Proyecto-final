@@ -7,10 +7,10 @@
       
       <!-- Botones a la derecha -->
       <ul class="navbar-links">
-        <button   class="boton-navbar"><a >Vigilantes</a></button>
+        <button (click)="changeView('registro-vigilantes')" class="boton-navbar"><a >Vigilantes</a></button>
         <button (click)="changeView('registro-usuar')" class="boton-navbar"><a >Registro</a></button>
-        <button routerLink="/Entrada" class="boton-navbar"><a >Entrada</a></button>
-        <button routerLink="/Salida" class="boton-navbar"><a >Salida</a></button>
+        <button (click)="changeView('entrada-computadores')" class="boton-navbar"><a >Entrada</a></button>
+        <button (click)="changeView('salida-computadores')" class="boton-navbar"><a >Salida</a></button>
       </ul>
     </div>
   </nav>

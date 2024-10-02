@@ -9,6 +9,9 @@
     
     <app-navbar (onViewChange)="setView($event)"></app-navbar>
     <app-registro-usuar *ngIf="currentView === 'registro-usuar'"></app-registro-usuar>
+    <app-entrada-computadores *ngIf="currentView === 'entrada-computadores'"></app-entrada-computadores>
+    <app-salida-computadores *ngIf="currentView === 'salida-computadores'"></app-salida-computadores>
+    <app-registro-vigilantes *ngIf="currentView === 'registro-vigilantes'"></app-registro-vigilantes>
 </body>
 </html>
 
