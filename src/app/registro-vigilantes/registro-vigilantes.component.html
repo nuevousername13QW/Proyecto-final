@@ -1,1 +1,16 @@
-<p>registro-vigilantes works!</p>
+<form class="cent-form" [formGroup]="registrovigi" (ngSubmit)="onSubmit()">
+    <h1>Registro Vigilantes</h1>
+    <div class="ctrl-label-input">
+        <label>Nombre Completo Vigilante</label>
+        <input formControlName="nombrevigi" type="text" placeholder="Nombre Completo">
+      </div>
+      <div class="ctrl-label-input">
+        <label>Numero de Identificación</label>
+        <input formControlName="documento_vigi" type="text" placeholder="Numero de Identificación">
+      </div>
+
+    <div class="abajo-btn">
+        <button type="submit" class="btn success">&#10004;</button>
+        <button type="reset" class="btn cancel">&#10006;</button>
+    </div>
+</form>

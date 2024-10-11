@@ -1,22 +1,23 @@
-<form class="form">
-    <h1>ENTRADA</h1>
+<form class="form" [formGroup]="entradaform" (ngSubmit)="ngOnInit()">
+    <h1>Entrada</h1>
     <div class="input-field">
         <label for="cedulaVigilante">Cédula Vigilante</label>
-        <input type="text" id="cedulaVigilante" placeholder="Cédula Vigilante">
+        <input  type="text" id="cedulaVigilante" placeholder="Cédula Vigilante">
+
 
         <label for="numeroIdentificacion">Número de Identificación</label>
-        <input type="text" id="numeroIdentificacion" placeholder="Número de Identificación">
+        <input (input)="onInput($event)" formControlName="numeroIdentificacion"  type="text" id="numeroIdentificacion" placeholder="Número de Identificación">
     </div>
     <div class="input-field">
         <label for="serial">Serial</label>
-        <input type="text" id="serial" placeholder="Serial">
+        <input formControlName="serial" type="text" id="serial" placeholder="Serial">
     </div>
     <div class="input-field">
         <label for="marca">Marca</label>
-        <input type="text" id="marca" placeholder="Marca">
+        <input formControlName="marca" type="text" id="marca" placeholder="Marca">
 
         <label for="color">Color</label>
-        <input type="text" id="color" placeholder="Color">
+        <input formControlName="color" type="text" id="color" placeholder="Color">
     </div>
     <div class="input-field">
         <label>Cargador</label>

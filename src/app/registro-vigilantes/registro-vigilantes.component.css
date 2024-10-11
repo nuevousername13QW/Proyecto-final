@@ -1,0 +1,65 @@
+.cent-form {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-content: center;
+    margin: 3%;
+  }
+
+.abajo-btn{
+    display: flex;
+    margin-top: 20px;
+    justify-content: space-evenly;
+}
+
+.ctrl-label-input{
+    display: flex;
+    margin-bottom: 20px;
+    margin-top: 40px;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #ffffff;
+    font-family: 'Work Sans', sans-serif;
+}
+
+label {
+    background-color: black;
+    border-radius: 20px;
+    display: flex;
+    color: #ffffff;
+    font-size: 1.2rem;
+    text-align: center;
+    align-items: center;
+    width: 21vh;
+    justify-content: center;
+}
+
+input {
+    margin-left: 60px;
+    margin-right: 60px;
+    padding: 10px;
+    border-radius: 5px;
+    width: auto;
+    font-size: 1rem;
+    background-color: black;
+    color: white;
+    border: 1px solid #ffffff;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 20px;
+    border-color: #FFFFFF;
+    background-color: black;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+
+  }

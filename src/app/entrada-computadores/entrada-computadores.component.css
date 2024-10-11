@@ -36,16 +36,15 @@ button {
 }
 
 select {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    width: 30vh;
-    border-radius: 10px;
-    border-color: #ffffff;
-    background-color: black;
-    color: #ffffff;
     margin-left: 60px;
     margin-right: 60px;
+    padding: 10px;
+    border-radius: 5px;
+    width: 30vh;
+    background-color: black;
+    font-size: 1rem;
+    color: white;
+    border: 1px solid #ffffff;
 }
 
 label {
@@ -69,4 +68,5 @@ input {
     background-color: black;
     color: white;
     border: 1px solid #ffffff;
+    font-size: 1rem;
 }
