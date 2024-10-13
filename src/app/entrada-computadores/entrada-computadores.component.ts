@@ -1,27 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { DataService } from '../data.service';
-
+import { IdcompucarnetsService } from '../idcompucarnets.service';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-entrada-computadores',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './entrada-computadores.component.html',
   styleUrl: './entrada-computadores.component.css'
 })
 export class EntradaComputadoresComponent implements OnInit {
   public entradaform!: FormGroup;
+  private idComputadorCarnet: number | null = null;
 
   constructor(
     private formBuilder: FormBuilder,
-    private dataService: DataService // Inyectar el servicio
+    private dataService: DataService,
+    private idcompucarnetsService: IdcompucarnetsService, //aqui se inyectan los dos servicios
+    private http: HttpClient
   ) { }
 
   ngOnInit(): void {
     // Inicializamos el formulario reactivo
     this.entradaform = this.formBuilder.group({
+      cedulaVigilante: ['', Validators.required],
       numeroIdentificacion: ['', Validators.required],
       serial: ['', Validators.required],
       marca: ['', Validators.required],
@@ -32,24 +37,39 @@ export class EntradaComputadoresComponent implements OnInit {
   }
   
   onInput(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    const documento_identidad = inputElement.value;
-  
-    // Verifica que el número de identificación no esté vacío
+    const documento_identidad = this.entradaform.get('numeroIdentificacion')?.value;
+
     if (documento_identidad) {
-      // Llamar al servicio para obtener los datos del backend
       this.dataService.getData(documento_identidad).subscribe(
-        (response) => {
-          if (response && response.computador) {
-            // Poner los datos en el formulario
+        (dataResponse) => {
+          if (dataResponse && dataResponse.computador) {
             this.entradaform.patchValue({
               numeroIdentificacion: documento_identidad,
-              serial: response.computador.serial,
-              marca: response.computador.marca,
-              color: response.computador.color,
-              cargador: response.computador.cargador,
-              mouse: response.computador.mouse
+              serial: dataResponse.computador.serial,
+              marca: dataResponse.computador.marca,
+              color: dataResponse.computador.color,
+              cargador: dataResponse.computador.cargador,
+              mouse: dataResponse.computador.mouse
             });
+
+            const serial = this.entradaform.get('serial')?.value;
+            if (documento_identidad && serial) {
+              this.idcompucarnetsService.getIdComputadorCarnet(documento_identidad, serial).subscribe(
+                (response) => {
+                  if (response && response.idcomputador_carnet) {
+                    this.idComputadorCarnet = response.idcomputador_carnet;
+                    console.log('ID Computador Carnet:', this.idComputadorCarnet);
+                  } else {
+                    console.error('ID no encontrado');
+                  }
+                },
+                (error) => {
+                  console.error('Error al obtener el ID:', error);
+                }
+              );
+            } else {
+              console.error('Debe ingresar el serial del computador');
+            }
           } else {
             console.error('Datos no encontrados para el documento de identidad proporcionado');
           }
@@ -59,12 +79,35 @@ export class EntradaComputadoresComponent implements OnInit {
         }
       );
     } else {
-      console.error('Debe ingresar un número de identificación');
+      console.error('Debe ingresar el número de identificación');
     }
   }
 
-  
+  onSubmit(): void {
+    if (this.idComputadorCarnet) {
+      console.log('Enviando registro a la base de datos'); // Log para depuración
+      this.registrarEntradaSalida(this.idComputadorCarnet);
+    } else {
+      console.error('ID Computador Carnet no encontrado');
+    }
+  }
+  registrarEntradaSalida(idcomputador_carnet: number) {
+    const registroData = {
+      documento_vigilante: this.entradaform.controls['cedulaVigilante'].value,
+      id_compu_carnet: idcomputador_carnet
+    };
 
+    console.log('Datos del registro:', registroData); // Log para depuración
+
+    this.http.post('http://localhost:3000/api/Registro', registroData).subscribe({
+      next: () => {
+        alert('Registro completado exitosamente.');
+        this.entradaform.reset(); // Restablece el formulario a su estado inicial
+        this.idComputadorCarnet = null; // Restablecer la variable idComputadorCarnet
+      },
+      error: (error) => {
+        console.error('Error al registrar entrada:1', error);
+      }
+    });
 }
-
-//no retorno, ya no se que hacer para que esto funcione, estoy cansado jefe, si eres capaz piensa tal vez en volver a pedirle a chatgpt que haga una nueva función, intenta volver a ahcerlo, animo campeón!!!
+}

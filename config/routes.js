@@ -60,7 +60,6 @@ router.post('/insertarVigilante', (req, res) => {
     });
 });
 
-// echale ojo con esto que debe estar malo pai
 router.get('/obtenerDatos/:documento_identidad', (req, res) => {
     const documento_identidad = req.params.documento_identidad;
     const query = `SELECT u.*, ca.*, comp.*
@@ -95,6 +94,74 @@ router.get('/obtenerDatos/:documento_identidad', (req, res) => {
     });
 });
 
+router.post('/Registro', (req, res) => {
+    const { documento_vigilante, id_compu_carnet } = req.body;
 
+    // Validación de campos
+    if (!documento_vigilante || !id_compu_carnet) {
+        return res.status(400).json({ mensaje: 'Faltan datos requeridos.' });
+    }
+
+    // Comprobación de que el documento del vigilante existe
+    const checkVigilanteQuery = `
+        SELECT * FROM vigilantes WHERE documento_vigilante = ?
+    `;
+    connection.query(checkVigilanteQuery, [documento_vigilante], (err, results) => {
+        if (err) {
+            console.error('Error al verificar vigilante:', err);
+            return res.status(500).json({ mensaje: 'Error al verificar vigilante.' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ mensaje: 'Vigilante no encontrado.' });
+        }
+
+        // Inserción en la tabla de registros
+        const insertRegistroQuery = `
+            INSERT INTO registros (documento_vigi, id_compu_carnet)
+            VALUES (?, ?)
+        `;
+        connection.query(insertRegistroQuery, [documento_vigilante, id_compu_carnet], (err, results) => {
+            if (err) {
+                console.error('Error al crear registro:2', err);
+                return res.status(500).json({ mensaje: 'Error al crear registro.' });
+            }
+
+            // Respuesta exitosa
+            res.status(201).json({ mensaje: 'Registro creado exitosamente.', id_registro: results.insertId });
+        });
+    });
+});
+
+router.post('/obtener-idcomputador-carnet', (req, res) => {
+    const { documento_identidad, serial } = req.body;
+    console.log('Datos recibidos:', { documento_identidad, serial });
+
+    if (!documento_identidad || !serial) {
+        return res.status(400).send({ error: 'Documento de identidad y serial son requeridos' });
+    }
+
+    const query = `
+        SELECT cc.idcomputador_carnet
+        FROM usuarios u
+        JOIN carnet ca ON u.documento_identidad = ca.codigo_barras
+        JOIN computador_carnet cc ON ca.id_carnet = cc.id_carnet
+        JOIN computadores comp ON cc.serial_compu = comp.serial
+        WHERE u.documento_identidad = ? AND comp.serial = ?
+    `;
+    
+    connection.query(query, [documento_identidad, serial], (error, results) => {
+        if (error) {
+            console.error('Error en la consulta SQL:', error);
+            return res.status(500).send({ error: 'Error al obtener el ID' });
+        }
+
+        if (results.length > 0) {
+            res.send({ idcomputador_carnet: results[0].idcomputador_carnet });
+        } else {
+            res.status(404).send({ error: 'ID no encontrado' });
+        }
+    });
+});
 
 module.exports = router;
