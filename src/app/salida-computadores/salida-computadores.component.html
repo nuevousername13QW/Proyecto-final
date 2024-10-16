@@ -2,19 +2,19 @@
     <h1>Salida</h1>
     <div class="input-field">
         <label for="cedulaVigilante">Cédula Vigilante</label>
-        <input formControlName="cedulaVigilante" type="text" id="cedulaVigilante" placeholder="Cédula Vigilante">
+        <input formControlName="cedulaVigilante" type="text" id="cedulaVigilante" placeholder="Cédula Vigilante" autocomplete="off">
         <label for="numeroIdentificacion">Número de Identificación</label>
-        <input (input)="onInput($event)" formControlName="numeroIdentificacion" type="text" id="numeroIdentificacion" placeholder="Número de Identificación">
+        <input (input)="onInput($event)" autocomplete="off" formControlName="numeroIdentificacion" type="text" id="numeroIdentificacion" placeholder="Número de Identificación">
     </div>
     <div class="input-field">
         <label for="serial">Serial</label>
-        <input formControlName="serial" type="text" id="serial" placeholder="Serial">
+        <input formControlName="serial" type="text" id="serial" placeholder="Serial" autocomplete="off">
     </div>
     <div class="input-field">
         <label for="marca">Marca</label>
-        <input formControlName="marca" type="text" id="marca" placeholder="Marca">
+        <input formControlName="marca" type="text" id="marca" placeholder="Marca" autocomplete="off">
         <label for="color">Color</label>
-        <input formControlName="color" type="text" id="color" placeholder="Color">
+        <input formControlName="color" type="text" id="color" placeholder="Color" autocomplete="off">
     </div>
     <div class="input-field">
         <label>Cargador</label>
