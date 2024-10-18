@@ -94,7 +94,8 @@ router.get('/obtenerDatos/:documento_identidad', (req, res) => {
     });
 });
 
-router.post('/Registro', (req, res) => {
+
+router.post('/RegistroEntrada', (req, res) => {
     const { documento_vigilante, id_compu_carnet } = req.body;
 
     // Validación de campos
@@ -116,19 +117,109 @@ router.post('/Registro', (req, res) => {
             return res.status(404).json({ mensaje: 'Vigilante no encontrado.' });
         }
 
-        // Inserción en la tabla de registros
-        const insertRegistroQuery = `
-            INSERT INTO registros (documento_vigi, id_compu_carnet)
-            VALUES (?, ?)
+        // Comprobación de si el registro ya existe
+        const checkRegistroQuery = `
+            SELECT * FROM registros WHERE documento_vigi = ? AND id_compu_carnet = ?
         `;
-        connection.query(insertRegistroQuery, [documento_vigilante, id_compu_carnet], (err, results) => {
+        connection.query(checkRegistroQuery, [documento_vigilante, id_compu_carnet], (err, registroResults) => {
             if (err) {
-                console.error('Error al crear registro:2', err);
-                return res.status(500).json({ mensaje: 'Error al crear registro.' });
+                console.error('Error al verificar registro:', err);
+                return res.status(500).json({ mensaje: 'Error al verificar registro.' });
             }
 
-            // Respuesta exitosa
-            res.status(201).json({ mensaje: 'Registro creado exitosamente.', id_registro: results.insertId });
+            // Verificar si ya está registrado como 'dentro'
+            if (registroResults.length > 0) {
+                const registro = registroResults[0]; // Obtener el registro encontrado
+                if (registro.estado === 'dentro') {
+                    return res.status(400).json({ mensaje: 'La persona ya está dentro. Debe registrar su salida antes de ingresar de nuevo.' });
+                }
+
+                // Si no está dentro, actualizar el estado a 'dentro'
+                const updateRegistroQuery = `
+                    UPDATE registros 
+                    SET estado = 'dentro' 
+                    WHERE documento_vigi = ? AND id_compu_carnet = ?
+                `;
+                connection.query(updateRegistroQuery, [documento_vigilante, id_compu_carnet], (err) => {
+                    if (err) {
+                        console.error('Error al actualizar registro:', err);
+                        return res.status(500).json({ mensaje: 'Error al actualizar registro.' });
+                    }
+                    // Respuesta exitosa
+                    return res.status(200).json({ mensaje: 'Registro actualizado a "dentro" exitosamente.' });
+                });
+            } else {
+                // Si no existe, insertar nuevo registro
+                const insertRegistroQuery = `
+                    INSERT INTO registros (documento_vigi, id_compu_carnet, estado)
+                    VALUES (?, ?, 'dentro')
+                `;
+                connection.query(insertRegistroQuery, [documento_vigilante, id_compu_carnet], (err, results) => {
+                    if (err) {
+                        console.error('Error al crear registro:', err);
+                        return res.status(500).json({ mensaje: 'Error al crear registro.' });
+                    }
+                    // Respuesta exitosa
+                    return res.status(201).json({ mensaje: 'Registro creado exitosamente.', id_registro: results.insertId });
+                });
+            }
+        });
+    });
+});
+
+
+
+
+router.post('/registroSalida', (req, res) => {
+    const { documento_vigilante, id_compu_carnet } = req.body;
+
+    // Validación de campos
+    if (!documento_vigilante || !id_compu_carnet) {
+        return res.status(400).json({ mensaje: 'Faltan datos requeridos.' });
+    }
+
+    // Comprobación de que el documento del vigilante existe
+    const checkVigilanteQuery = `
+        SELECT * FROM vigilantes WHERE documento_vigilante = ?
+    `;
+    connection.query(checkVigilanteQuery, [documento_vigilante], (err, results) => {
+        if (err) {
+            console.error('Error al verificar vigilante:', err);
+            return res.status(500).json({ mensaje: 'Error al verificar vigilante.' });
+        }
+
+        if (results.length === 0) {
+            return res.status(404).json({ mensaje: 'Vigilante no encontrado.' });
+        }
+
+        // Comprobación de que la persona esté registrada como "dentro"
+        const checkRegistroQuery = `
+            SELECT * FROM registros WHERE id_compu_carnet = ? AND estado = 'dentro'
+        `;
+        connection.query(checkRegistroQuery, [id_compu_carnet], (err, registros) => {
+            if (err) {
+                console.error('Error al verificar registro:', err);
+                return res.status(500).json({ mensaje: 'Error al verificar registro.' });
+            }
+
+            if (registros.length === 0) {
+                // Si no hay un registro activo como "dentro", no se puede registrar la salida
+                return res.status(400).json({ mensaje: 'No se puede registrar la salida. La persona no se registró en la entrada.' });
+            }
+
+            // Actualización del registro para marcarlo como "fuera"
+            const updateRegistroQuery = `
+                UPDATE registros SET estado = 'fuera' WHERE id_compu_carnet = ? AND estado = 'dentro'
+            `;
+            connection.query(updateRegistroQuery, [id_compu_carnet], (err, results) => {
+                if (err) {
+                    console.error('Error al actualizar registro:', err);
+                    return res.status(500).json({ mensaje: 'Error al registrar salida.' });
+                }
+
+                // Respuesta exitosa
+                return res.status(200).json({ mensaje: 'Salida registrada exitosamente.' });
+            });
         });
     });
 });

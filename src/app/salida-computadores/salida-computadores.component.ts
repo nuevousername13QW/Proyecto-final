@@ -98,14 +98,14 @@ export class SalidaComputadoresComponent implements OnInit {
 
     console.log('Datos del registro:', registroData); // Log para depuración
 
-    this.http.post('http://localhost:3000/api/Registro', registroData).subscribe({
+    this.http.post('http://localhost:3000/api/registroSalida', registroData).subscribe({
       next: () => {
         alert('Registro completado exitosamente.');
         this.salidaform.reset(); // Restablece el formulario a su estado inicial
         this.idComputadorCarnet = null; // Restablecer la variable idComputadorCarnet
       },
-      error: (error) => {
-        console.error('Error al registrar entrada:1', error);
+      error: (err) => {
+        alert(err.error.mensaje);
       }
     });
 }
