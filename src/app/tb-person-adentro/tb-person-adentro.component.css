@@ -1,0 +1,87 @@
+.table-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 40vh;
+}
+
+.container-tabla {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: 'Arial', sans-serif;
+}
+
+thead th {
+  background-color: #2c2c2c;
+  color: #fff;
+  font-size: 18px;
+  padding: 10px;
+  text-align: left;
+}
+
+tbody tr {
+  background-color: #3a3a3a;
+  border-bottom: 1px solid #2c2c2c;
+  transition: background-color 0.3s ease;
+}
+
+tbody tr:hover {
+  background-color: #4e4e4e;
+}
+
+tbody td {
+  padding: 10px;
+  font-size: 16px;
+}
+
+tbody td:last-child {
+  text-align: center;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border-radius: 20px;
+  border-color: #FFFFFF;
+  background-color: black;
+  color: #FFFFFF;
+  transition: background-color 0.3s ease;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;  /* Centra el botón horizontalmente */
+  align-items: center;      /* Centra el botón verticalmente si es necesario */
+  margin-top: 20px;     
+}
+
+.no-personas {
+  text-align: center; /* Alinea el texto al centro */
+  font-size: 1.2em; /* Aumenta el tamaño de la fuente */
+  color: #000000; /* Cambia el color según tu diseño */
+  margin: 20px 0; /* Espacio superior e inferior */
+}
+
+h2{
+  color: #ffffff;
+  margin-top: 4vh;
+  text-align: center;
+}
+
+button:hover {
+  background-color: #0e2531;
+}
+
+button:focus {
+  outline: none;
+}

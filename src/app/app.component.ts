@@ -7,13 +7,14 @@ import { RegistroUsuarComponent } from './registro-usuar/registro-usuar.componen
 import { EntradaComputadoresComponent } from "./entrada-computadores/entrada-computadores.component";
 import { SalidaComputadoresComponent } from "./salida-computadores/salida-computadores.component";
 import { RegistroVigilantesComponent } from "./registro-vigilantes/registro-vigilantes.component";
+import { TbPersonAdentroComponent } from './tb-person-adentro/tb-person-adentro.component';
 
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, ReactiveFormsModule, CommonModule, RegistroUsuarComponent, EntradaComputadoresComponent, SalidaComputadoresComponent, RegistroVigilantesComponent],
+  imports: [RouterOutlet, NavbarComponent, ReactiveFormsModule, CommonModule, RegistroUsuarComponent, EntradaComputadoresComponent, SalidaComputadoresComponent, RegistroVigilantesComponent, TbPersonAdentroComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

@@ -94,7 +94,6 @@ router.get('/obtenerDatos/:documento_identidad', (req, res) => {
     });
 });
 
-
 router.post('/RegistroEntrada', (req, res) => {
     const { documento_vigilante, id_compu_carnet } = req.body;
 
@@ -119,9 +118,9 @@ router.post('/RegistroEntrada', (req, res) => {
 
         // Comprobación de si el registro ya existe
         const checkRegistroQuery = `
-            SELECT * FROM registros WHERE documento_vigi = ? AND id_compu_carnet = ?
+            SELECT * FROM registros WHERE id_compu_carnet = ?
         `;
-        connection.query(checkRegistroQuery, [documento_vigilante, id_compu_carnet], (err, registroResults) => {
+        connection.query(checkRegistroQuery, [id_compu_carnet], (err, registroResults) => {
             if (err) {
                 console.error('Error al verificar registro:', err);
                 return res.status(500).json({ mensaje: 'Error al verificar registro.' });
@@ -134,11 +133,11 @@ router.post('/RegistroEntrada', (req, res) => {
                     return res.status(400).json({ mensaje: 'La persona ya está dentro. Debe registrar su salida antes de ingresar de nuevo.' });
                 }
 
-                // Si no está dentro, actualizar el estado a 'dentro'
+                // Si no está dentro, actualizar el estado a 'dentro' y el documento del vigilante
                 const updateRegistroQuery = `
                     UPDATE registros 
-                    SET estado = 'dentro' 
-                    WHERE documento_vigi = ? AND id_compu_carnet = ?
+                    SET estado = 'dentro', documento_vigi = ?
+                    WHERE id_compu_carnet = ?
                 `;
                 connection.query(updateRegistroQuery, [documento_vigilante, id_compu_carnet], (err) => {
                     if (err) {
@@ -166,9 +165,6 @@ router.post('/RegistroEntrada', (req, res) => {
         });
     });
 });
-
-
-
 
 router.post('/registroSalida', (req, res) => {
     const { documento_vigilante, id_compu_carnet } = req.body;
@@ -207,11 +203,13 @@ router.post('/registroSalida', (req, res) => {
                 return res.status(400).json({ mensaje: 'No se puede registrar la salida. La persona no se registró en la entrada.' });
             }
 
-            // Actualización del registro para marcarlo como "fuera"
+            // Actualización del registro para marcarlo como "fuera" y actualizar el documento del vigilante
             const updateRegistroQuery = `
-                UPDATE registros SET estado = 'fuera' WHERE id_compu_carnet = ? AND estado = 'dentro'
+                UPDATE registros 
+                SET estado = 'fuera', documento_vigi = ? 
+                WHERE id_compu_carnet = ? AND estado = 'dentro'
             `;
-            connection.query(updateRegistroQuery, [id_compu_carnet], (err, results) => {
+            connection.query(updateRegistroQuery, [documento_vigilante, id_compu_carnet], (err, results) => {
                 if (err) {
                     console.error('Error al actualizar registro:', err);
                     return res.status(500).json({ mensaje: 'Error al registrar salida.' });
@@ -221,6 +219,24 @@ router.post('/registroSalida', (req, res) => {
                 return res.status(200).json({ mensaje: 'Salida registrada exitosamente.' });
             });
         });
+    });
+});
+
+router.get('/personasDentro', (req, res) => {
+    const query = `
+        SELECT u.nomb_completo AS nombre, u.documento_identidad, r.estado 
+        FROM registros r
+        JOIN computador_carnet cc ON r.id_compu_carnet = cc.idcomputador_carnet
+        JOIN carnet c ON cc.id_carnet = c.id_carnet
+        JOIN usuarios u ON c.codigo_barras = u.documento_identidad
+        WHERE r.estado = 'dentro';  
+            `;
+    connection.query(query, (err, results) => {
+        if (err) {
+            console.error('Error al obtener personas dentro:', err);
+            return res.status(500).json({ mensaje: 'Error al obtener personas dentro.' });
+        }
+        res.status(200).json(results);
     });
 });
 
@@ -240,7 +256,7 @@ router.post('/obtener-idcomputador-carnet', (req, res) => {
         JOIN computadores comp ON cc.serial_compu = comp.serial
         WHERE u.documento_identidad = ? AND comp.serial = ?
     `;
-    
+
     connection.query(query, [documento_identidad, serial], (error, results) => {
         if (error) {
             console.error('Error en la consulta SQL:', error);
@@ -254,5 +270,23 @@ router.post('/obtener-idcomputador-carnet', (req, res) => {
         }
     });
 });
+
+router.post('/salidaMasiva', (req, res) => {
+    const sql = "UPDATE registros SET estado = 'fuera' WHERE estado = 'dentro'";
+  
+    connection.query(sql, (err, result) => {
+      if (err) {
+        console.error('Error al actualizar los estados:', err);
+        return res.status(500).json({ message: 'Error al actualizar los estados.' });
+      }
+  
+      // Verifica si se actualizó alguna fila
+      if (result.affectedRows > 0) {
+        res.status(200).json({ message: 'Estados actualizados a "fuera" exitosamente.' });
+      } else {
+        res.status(200).json({ message: 'No hay personas dentro para actualizar.' });
+      }
+    });
+  });
 
 module.exports = router;

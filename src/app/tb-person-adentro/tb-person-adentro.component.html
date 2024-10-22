@@ -1,0 +1,28 @@
+<h2>¡¡Personas que siguen dentro!!</h2>
+<div class="table-container" *ngIf="personas && personas.length > 0">
+  <div class="container-tabla">
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Documento Identidad</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let persona of personas">
+          <td>{{ persona.nombre }}</td>
+          <td>{{ persona.documento_identidad }}</td>
+          <td>{{ persona.estado }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="!personas || personas.length === 0"> 
+  <p class="no-personas">No hay personas adentro.</p>
+</div>
+
+
+<button (click)="salidaMasiva()">Dar salida Masiva</button>
